@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flixora Admin Panel</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#0b0b10;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:18px;
+  background:#171720;
+  border-bottom:1px solid #30303b;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{font-size:23px;font-weight:bold;color:#ff3155}
+.container{max-width:850px;margin:auto;padding:18px}
+.panel{
+  background:#171720;
+  border:1px solid #30303b;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:20px;
+}
+h2{font-size:20px;margin-top:0}
+label{
+  display:block;
+  margin:14px 0 7px;
+  font-size:13px;
+  color:#ccc;
+}
+input,select,textarea{
+  display:block;
+  width:100%;
+  padding:13px;
+  border:1px solid #363642;
+  border-radius:8px;
+  background:#0d0d13;
+  color:#fff;
+  outline:none;
+}
+textarea{min-height:80px;resize:vertical}
+button{
+  border:0;
+  padding:12px 15px;
+  border-radius:8px;
+  background:#ff3155;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled{opacity:.5}
+.full{width:100%;margin-top:16px}
+.secondary{background:#33333e}
+.danger{background:#b42335}
+.status{font-size:13px;margin-top:12px;overflow-wrap:anywhere}
+.movie{
+  display:flex;
+  gap:13px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid #30303b;
+}
+.movie img{
+  width:65px;
+  height:90px;
+  object-fit:cover;
+  border-radius:7px;
+  background:#252530;
+}
+.movie-info{flex:1;min-width:0}
+.movie-info h3{font-size:15px;margin:0 0 6px}
+.movie-info p{font-size:12px;color:#aaa;margin:0 0 10px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.actions button{padding:8px 11px;font-size:12px}
+.hidden{display:none!important}
+.note{color:#aaa;font-size:12px;line-height:1.6}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">FLIXORA</div>
+  <button id="logoutBtn" class="secondary hidden">Logout</button>
+</header>
+
+<div class="container">
+
+  <section id="loginPanel" class="panel">
+    <h2>Admin Login 🔐</h2>
+    <p class="note">Sign in with your authorized administrator account.</p>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="username"
+             required placeholder="Admin email">
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+             autocomplete="current-password"
+             required placeholder="Password">
+
+      <button id="loginBtn" class="full" type="submit">Login</button>
+    </form>
+
+    <div id="loginStatus" class="status" role="status"></div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+
+    <div class="panel">
+      <h2 id="formTitle">Add New Movie 🎬</h2>
+
+      <form id="movieForm">
+        <label for="title">Movie Name *</label>
+        <input id="title" maxlength="150" required
+               placeholder="Movie title">
+
+        <label for="year">Release Year *</label>
+        <input id="year" type="number" min="1888" max="2100"
+               required placeholder="2026">
+
+        <label for="genre">Genre *</label>
+        <select id="genre" required>
+          <option value="">Select genre</option>
+          <option>Action</option>
+          <option>Adventure</option>
+          <option>Animation</option>
+          <option>Comedy</option>
+          <option>Crime</option>
+          <option>Documentary</option>
+          <option>Drama</option>
+          <option>Family</option>
+          <option>Fantasy</option>
+          <option>Horror</option>
+          <option>Romance</option>
+          <option>Sci-Fi</option>
+          <option>Thriller</option>
+          <option>Other</option>
+        </select>
+
+        <label for="poster">Poster Image URL</label>
+        <input id="poster" type="url" maxlength="1000"
+               placeholder="https://example.com/poster.jpg">
+
+        <label for="description">Description</label>
+        <textarea id="description" maxlength="3000"
+                  placeholder="Movie description"></textarea>
+
+        <label for="direct">Direct Download URL</label>
+        <input id="direct" type="url" maxlength="2000"
+               placeholder="https://...">
+
+        <label for="drive">Google Drive URL</label>
+        <input id="drive" type="url" maxlength="2000"
+               placeholder="https://drive.google.com/...">
+
+        <label for="mediafire">MediaFire URL</label>
+        <input id="mediafire" type="url" maxlength="2000"
+               placeholder="https://www.mediafire.com/...">
+
+        <label for="mega">MEGA URL</label>
+        <input id="mega" type="url" maxlength="2000"
+               placeholder="https://mega.nz/...">
+
+        <button id="saveBtn" class="full" type="submit">
+          Save Movie
+        </button>
+
+        <button id="cancelEditBtn" class="full secondary hidden"
+                type="button">Cancel Edit</button>
+
+        <div id="movieStatus" class="status" role="status"></div>
+      </form>
+
+      <p class="note">
+        Add only content you own or are authorized to distribute.
+        Links must be valid HTTPS URLs.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Manage Movies</h2>
+      <input id="movieSearch" type="search"
+             placeholder="Search movie titles...">
+      <div id="movieList"></div>
+      <div id="listStatus" class="status" role="status"></div>
+    </div>
+
+  </section>
+</div>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* Replace these values with your Firebase Web App config. */
+const firebaseConfig = {
+  apiKey: "YAHAN_APNI_API_KEY",
+  authDomain: "YAHAN_APNA_AUTH_DOMAIN",
+  projectId: "YAHAN_APNA_PROJECT_ID",
+  storageBucket: "YAHAN_APNA_STORAGE_BUCKET",
+  messagingSenderId: "YAHAN_APNA_SENDER_ID",
+  appId: "YAHAN_APNA_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+
+let editingId = null;
+let movies = [];
+let busy = false;
+
+function status(id, message) {
+  $(id).textContent = message;
+}
+
+function setBusy(value) {
+  busy = value;
+  $("loginBtn").disabled = value;
+  $("saveBtn").disabled = value;
+}
+
+function validOptionalUrl(value) {
+  if (!value) return true;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function getMovieData() {
+  const data = {
+    title: $("title").value.trim(),
+    year: Number($("year").value),
+    genre: $("genre").value,
+    poster: $("poster").value.trim(),
+    description: $("description").value.trim(),
+    direct: $("direct").value.trim(),
+    drive: $("drive").value.trim(),
+    mediafire: $("mediafire").value.trim(),
+    mega: $("mega").value.trim()
+  };
+
+  if (!data.title || !data.genre ||
+      !Number.isInteger(data.year) ||
+      data.year < 1888 || data.year > 2100) {
+    throw new Error("Movie name, valid year aur genre bharo.");
+  }
+
+  for (const key of [
+    "poster", "direct", "drive", "mediafire", "mega"
+  ]) {
+    if (!validOptionalUrl(data[key])) {
+      throw new Error(key + " URL HTTPS hona chahiye.");
+    }
+  }
+
+  return data;
+}
+
+function resetForm() {
+  editingId = null;
+  $("movieForm").reset();
+  $("formTitle").textContent = "Add New Movie 🎬";
+  $("saveBtn").textContent = "Save Movie";
+  $("cancelEditBtn").classList.add("hidden");
+  status("movieStatus", "");
+}
+
+function escapeText(value) {
+  return String(value ?? "");
+}
+
+function renderMovies() {
+  const query = $("movieSearch").value.trim().toLowerCase();
+  const list = $("movieList");
+  list.replaceChildren();
+
+  const filtered = movies.filter(movie =>
+    escapeText(movie.title).toLowerCase().includes(query)
+  );
+
+  if (!filtered.length) {
+    status("listStatus", "No movies found.");
+    return;
+  }
+
+  status("listStatus", filtered.length + " movie(s)");
+
+  for (const movie of filtered) {
+    const row = document.createElement("div");
+    row.className = "movie";
+
+    const img = document.createElement("img");
+    img.alt = "Movie poster";
+    img.loading = "lazy";
+
+    if (validOptionalUrl(movie.poster) && movie.poster) {
+      img.src = movie.poster;
+    }
+
+    const info = document.createElement("div");
+    info.className = "movie-info";
+
+    const title = document.createElement("h3");
+    title.textContent = escapeText(movie.title);
+
+    const detail = document.createElement("p");
+    detail.textContent =
+      escapeText(movie.year) + " · " + escapeText(movie.genre);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "secondary";
+    edit.textContent = "Edit";
+    edit.addEventListener("click", () => startEdit(movie));
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "danger";
+    remove.textContent = "Delete";
+    remove.addEventListener("click", () => removeMovie(movie));
+
+    actions.append(edit, remove);
+    info.append(title, detail, actions);
+    row.append(img, info);
+    list.append(row);
+  }
+}
+
+function startEdit(movie) {
+  editingId = movie.id;
+
+  $("title").value = movie.title ?? "";
+  $("year").value = movie.year ?? "";
+  $("genre").value = movie.genre ?? "";
+  $("poster").value = movie.poster ?? "";
+  $("description").value = movie.description ?? "";
+  $("direct").value = movie.direct ?? "";
+  $("drive").value = movie.drive ?? "";
+  $("mediafire").value = movie.mediafire ?? "";
+  $("mega").value = movie.mega ?? "";
+
+  $("formTitle").textContent = "Edit Movie ✏️";
+  $("saveBtn").textContent = "Update Movie";
+  $("cancelEditBtn").classList.remove("hidden");
+  status("movieStatus", "Editing: " + movie.title);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function loadMovies() {
+  status("listStatus", "Loading movies...");
+
+  try {
+    const snapshot = await getDocs(collection(db, "movies"));
+    movies = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    movies.sort((a, b) =>
+      escapeText(a.title).localeCompare(escapeText(b.title))
+    );
+
+    renderMovies();
+  } catch (error) {
+    console.error(error);
+    status("listStatus",
+      "Movies load nahi hue. Firestore Rules aur connection check karo.");
+  }
+}
+
+async function removeMovie(movie) {
+  if (busy) return;
+
+  if (!confirm('Delete "' + movie.title + '"?')) return;
+
+  setBusy(true);
+
+  try {
+    await deleteDoc(doc(db, "movies", movie.id));
+    status("movieStatus", "Movie deleted.");
+    await loadMovies();
+  } catch (error) {
+    console.error(error);
+    status("movieStatus",
+      "Delete failed. Admin permissions aur Rules check karo.");
+  } finally {
+    setBusy(false);
+  }
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy) return;
+
+  setBusy(true);
+  status("loginStatus", "Signing in...");
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      $("email").value.trim(),
+      $("password").value
+    );
+    // Admin authorization is checked again by onAuthStateChanged.
+  } catch (error) {
+    console.error(error);
+    status("loginStatus", "Login failed. Email/password check karo.");
+  } finally {
+    setBusy(false);
+  }
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    resetForm();
+  } catch (error) {
+    console.error(error);
+    alert("Logout nahi hua. Dobara try karo.");
+  }
+});
+
+$("movieForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy || !auth.currentUser) return;
+
+  setBusy(true);
+
+  try {
+    const data = getMovieData();
+
+    if (editingId) {
+      await updateDoc(doc(db, "movies", editingId), {
+        ...data,
+        updatedAt: serverTimestamp()
+      });
+      status("movieStatus", "Movie updated successfully.");
+    } else {
+      await addDoc(collection(db, "movies"), {
+        ...data,
+        createdAt: serverTimestamp()
+      });
+      status("movieStatus", "Movie added successfully.");
+    }
+
+    resetForm();
+    await loadMovies();
+
+  } catch (error) {
+    console.error(error);
+    status("movieStatus",
+      error.message || "Save failed. Rules aur connection check karo.");
+  } finally {
+    setBusy(false);
+  }
+});
+
+$("cancelEditBtn").addEventListener("click", resetForm);
+$("movieSearch").addEventListener("input", renderMovies);
+
+onAuthStateChanged(auth, async user => {
+  $("loginPanel").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+
+  if (!user) {
+    status("loginStatus", "Admin account se login karo.");
+    return;
+  }
+
+  try {
+    const adminRef = doc(db, "admins", user.uid);
+    const adminSnapshot = await getDoc(adminRef);
+
+    if (!adminSnapshot.exists() ||
+        adminSnapshot.data().role !== "admin") {
+      await signOut(auth);
+      status("loginStatus", "Access denied: authorized admin nahi hai.");
+      return;
+    }
+
+    $("loginPanel").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    $("logoutBtn").classList.remove("hidden");
+
+    await loadMovies();
+
+  } catch (error) {
+    console.error(error);
+    status("loginStatus",
+      "Admin verification failed. Firestore Rules check karo.");
+  }
+});
+</script>
+
+</body>
+</html>
