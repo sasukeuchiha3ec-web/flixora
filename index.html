@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flixora — Movies & More</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#0b0b10;color:#fff;
+  font-family:Arial,sans-serif
+}
+header{
+  padding:17px 20px;background:#15151d;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #292933
+}
+.logo{font-size:25px;font-weight:bold;color:#ff3155}
+.tag{font-size:11px;background:#292933;padding:8px 10px;border-radius:20px}
+.hero{
+  padding:35px 20px;
+  background:linear-gradient(135deg,#411326,#14141c 75%)
+}
+.hero h1{font-size:32px;margin:0 0 12px}
+.hero p{color:#ccc;line-height:1.6;margin-bottom:0}
+.search{padding:18px 16px 8px}
+input{
+  width:100%;padding:14px;border-radius:10px;
+  background:#17171f;color:#fff;border:1px solid #333;
+  font-size:15px
+}
+.section-title{padding:0 17px;margin-top:22px;font-size:20px}
+#status{padding:5px 17px;color:#aaa;font-size:13px}
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;padding:10px 13px 25px
+}
+.card{
+  background:#17171f;border:1px solid #292933;
+  border-radius:12px;overflow:hidden;min-width:0
+}
+.poster{
+  width:100%;height:210px;object-fit:cover;
+  background:linear-gradient(145deg,#39172b,#171721);
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px
+}
+.info{padding:12px}
+.info h3{font-size:15px;margin:0 0 7px;overflow-wrap:anywhere}
+.meta{font-size:12px;color:#aaa;margin:0 0 10px}
+.description{
+  font-size:12px;color:#ccc;line-height:1.5;
+  margin-bottom:12px;overflow-wrap:anywhere
+}
+button{
+  background:#ff3155;color:#fff;border:0;border-radius:8px;
+  padding:11px;width:100%;font-weight:bold;cursor:pointer
+}
+.details{margin-top:8px;background:#292933}
+footer{text-align:center;padding:25px;color:#888;font-size:12px}
+.modal{
+  position:fixed;inset:0;background:#000c;display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:10
+}
+.modal-box{
+  width:100%;max-width:420px;max-height:85vh;overflow:auto;
+  background:#171720;border:1px solid #333;border-radius:14px;padding:20px
+}
+.modal-box h2{margin-top:0}
+.download-link{display:block;margin:10px 0;text-decoration:none}
+.download-link button{background:#ff3155}
+.close{background:#33333e;margin-top:10px}
+.empty{grid-column:1/-1;text-align:center;padding:30px 10px;color:#aaa}
+.hidden{display:none!important}
+@media(min-width:650px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:15px 20px}
+  .poster{height:270px}
+  .hero{padding:50px 30px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">FLIXORA</div>
+  <div class="tag">MOVIE HUB</div>
+</header>
+
+<section class="hero">
+  <h1>Discover Your<br>Next Favourite.</h1>
+  <p>Explore movies, read details and choose an available download option.</p>
+</section>
+
+<div class="search">
+  <input id="search" type="search" placeholder="Search movies by name or genre...">
+</div>
+
+<h2 class="section-title">Latest Movies 🎬</h2>
+<div id="status" role="status">Connecting to Flixora...</div>
+<div class="grid" id="movies"></div>
+
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h2 id="modalTitle">Movie Details</h2>
+    <p id="modalMeta" class="meta"></p>
+    <p id="modalDescription" class="description"></p>
+    <h3>Available Links</h3>
+    <div id="downloadLinks"></div>
+    <button id="closeModal" class="close">Close</button>
+  </div>
+</div>
+
+<footer>© 2026 Flixora · Authorized content only</footer>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore, collection, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* Use your own Firebase Web App config here. */
+const firebaseConfig = {
+  apiKey: "AIzaSyBiLEWdoL9wstA1gB_D2oJaryfUuNZ_Dk8",
+  authDomain: "http://flixora-32e7c.firebaseapp.com",
+  projectId: "flixora-32e7c",
+  storageBucket: "http://flixora-32e7c.firebasestorage.app",
+  messagingSenderId: "306452549829",
+  appId: "306452549829:web:e5feebaf33ded56cffe0ac"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let movies = [];
+
+function safeHttpsUrl(value) {
+  if (!value) return "";
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function renderMovies() {
+  const query = $("search").value.trim().toLowerCase();
+  const container = $("movies");
+  container.replaceChildren();
+
+  const filtered = movies.filter(movie =>
+    String(movie.title || "").toLowerCase().includes(query) ||
+    String(movie.genre || "").toLowerCase().includes(query) ||
+    String(movie.year || "").includes(query)
+  );
+
+  $("status").textContent =
+    filtered.length ? filtered.length + " movie(s) available" : "";
+
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = movies.length
+      ? "No movies match your search."
+      : "No movies added yet.";
+    container.appendChild(empty);
+    return;
+  }
+
+  for (const movie of filtered) {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const posterUrl = safeHttpsUrl(movie.poster);
+    let poster;
+
+    if (posterUrl) {
+      poster = document.createElement("img");
+      poster.className = "poster";
+      poster.loading = "lazy";
+      poster.alt = String(movie.title || "Movie poster");
+      poster.src = posterUrl;
+    } else {
+      poster = document.createElement("div");
+      poster.className = "poster";
+      poster.textContent = "🎬";
+    }
+
+    const info = document.createElement("div");
+    info.className = "info";
+
+    const title = document.createElement("h3");
+    title.textContent = String(movie.title || "Untitled");
+
+    const meta = document.createElement("p");
+    meta.className = "meta";
+    meta.textContent =
+      String(movie.year || "") + " · " + String(movie.genre || "");
+
+    const button = document.createElement("button");
+    button.className = "details";
+    button.textContent = "View Details";
+    button.addEventListener("click", () => openDetails(movie));
+
+    info.append(title, meta, button);
+    card.append(poster, info);
+    container.appendChild(card);
+  }
+}
+
+function openDetails(movie) {
+  $("modalTitle").textContent = String(movie.title || "Movie Details");
+  $("modalMeta").textContent =
+    String(movie.year || "") + " · " + String(movie.genre || "");
+  $("modalDescription").textContent =
+    String(movie.description || "No description available.");
+
+  const linksBox = $("downloadLinks");
+  linksBox.replaceChildren();
+
+  const links = [
+    ["direct", "Direct Download"],
+    ["drive", "Google Drive"],
+    ["mediafire", "MediaFire"],
+    ["mega", "MEGA"]
+  ];
+
+  let count = 0;
+
+  for (const [key, label] of links) {
+    const url = safeHttpsUrl(movie[key]);
+    if (!url) continue;
+
+    const anchor = document.createElement("a");
+    anchor.className = "download-link";
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    const button = document.createElement("button");
+    button.textContent = label;
+    anchor.appendChild(button);
+    linksBox.appendChild(anchor);
+    count++;
+  }
+
+  if (!count) {
+    const message = document.createElement("p");
+    message.className = "description";
+    message.textContent = "No download links are available yet.";
+    linksBox.appendChild(message);
+  }
+
+  $("modal").style.display = "flex";
+}
+
+$("closeModal").addEventListener("click", () => {
+  $("modal").style.display = "none";
+});
+
+$("modal").addEventListener("click", event => {
+  if (event.target === $("modal")) {
+    $("modal").style.display = "none";
+  }
+});
+
+$("search").addEventListener("input", renderMovies);
+
+async function loadMovies() {
+  try {
+    $("status").textContent = "Loading movies...";
+
+    const snapshot = await getDocs(collection(db, "movies"));
+
+    movies = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    movies.sort((a, b) =>
+      String(b.createdAt?.seconds || 0)
+        .localeCompare(String(a.createdAt?.seconds || 0))
+    );
+
+    renderMovies();
+
+  } catch (error) {
+    console.error("Flixora loading error:", error);
+    $("status").textContent =
+      "Could not load movies. Check Firebase config, hosting and Firestore Rules.";
+    $("movies").replaceChildren();
+  }
+}
+
+loadMovies();
+</script>
+
+</body>
+</html>
