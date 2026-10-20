@@ -1,106 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flixora Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b10">
+<title>Flixora | Admin Dashboard</title>
 
 <style>
+:root{
+  --bg:#0b0b10;
+  --panel:#15151e;
+  --panel2:#1c1c27;
+  --border:#30303d;
+  --red:#ff3155;
+  --text:#fff;
+  --muted:#a5a5b5;
+  --green:#31d69a;
+}
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#0b0b10;
-  color:#fff;
-  font-family:Arial,sans-serif;
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 header{
-  padding:18px;
-  background:#171720;
-  border-bottom:1px solid #30303b;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:15px 20px;background:#111118;
+  border-bottom:1px solid var(--border);
 }
-.logo{font-size:23px;font-weight:bold;color:#ff3155}
-.container{max-width:850px;margin:auto;padding:18px}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--red)}
+.header-right{display:flex;align-items:center;gap:10px}
+.badge{
+  font-size:11px;color:var(--green);border:1px solid #23634f;
+  background:#10241e;padding:6px 9px;border-radius:20px
+}
+.container{max-width:1200px;margin:auto;padding:20px}
 .panel{
-  background:#171720;
-  border:1px solid #30303b;
-  border-radius:14px;
-  padding:18px;
-  margin-bottom:20px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:15px;padding:19px;margin-bottom:18px;
 }
-h2{font-size:20px;margin-top:0}
-label{
-  display:block;
-  margin:14px 0 7px;
-  font-size:13px;
-  color:#ccc;
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:19px;margin:0 0 17px}
+h3{font-size:15px}
+.muted,.note{color:var(--muted);font-size:12px;line-height:1.7}
+button,.btn{
+  border:0;border-radius:9px;padding:11px 14px;
+  background:var(--red);color:#fff;font-weight:bold;
 }
+button:disabled{opacity:.5;cursor:wait}
+.secondary{background:#30303d}
+.danger{background:#a92339}
+.success{color:var(--green)}
 input,select,textarea{
-  display:block;
-  width:100%;
-  padding:13px;
-  border:1px solid #363642;
-  border-radius:8px;
-  background:#0d0d13;
-  color:#fff;
-  outline:none;
+  width:100%;background:#0c0c12;color:#fff;
+  border:1px solid #383846;border-radius:9px;
+  padding:12px;outline:none;min-width:0;
 }
-textarea{min-height:80px;resize:vertical}
-button{
-  border:0;
-  padding:12px 15px;
-  border-radius:8px;
-  background:#ff3155;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+input:focus,select:focus,textarea:focus{
+  border-color:var(--red);
+  box-shadow:0 0 0 2px #ff31551e;
 }
-button:disabled{opacity:.5}
-.full{width:100%;margin-top:16px}
-.secondary{background:#33333e}
-.danger{background:#b42335}
-.status{font-size:13px;margin-top:12px;overflow-wrap:anywhere}
+textarea{min-height:95px;resize:vertical}
+label{
+  display:block;font-size:12px;color:#c8c8d2;
+  margin:14px 0 7px;
+}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.full{grid-column:1/-1}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.actions button{font-size:12px}
+.tabs{
+  display:flex;gap:8px;overflow-x:auto;padding:3px 0 14px;
+  margin-bottom:12px;scrollbar-width:thin;
+}
+.tab{
+  flex-shrink:0;background:#191922;border:1px solid var(--border);
+  color:#c7c7d2;padding:12px 15px;border-radius:10px;
+}
+.tab.active{
+  background:#35121d;color:#fff;border-color:var(--red);
+}
+.stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:13px;margin:20px 0;
+}
+.stat{
+  padding:17px;background:linear-gradient(145deg,#1b1b26,#121219);
+  border:1px solid var(--border);border-radius:13px;min-width:0;
+}
+.stat-icon{font-size:22px}
+.stat-number{font-size:27px;font-weight:900;margin:12px 0 6px;overflow-wrap:anywhere}
+.stat-label{font-size:12px;color:var(--muted)}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;margin-bottom:15px;
+}
+.section-head h2{margin:0}
 .movie{
-  display:flex;
-  gap:13px;
-  align-items:center;
-  padding:13px 0;
-  border-bottom:1px solid #30303b;
+  display:flex;align-items:center;gap:13px;padding:13px 0;
+  border-bottom:1px solid var(--border);
 }
+.movie:last-child{border-bottom:0}
 .movie img{
-  width:65px;
-  height:90px;
-  object-fit:cover;
-  border-radius:7px;
-  background:#252530;
+  width:62px;height:88px;object-fit:cover;border-radius:8px;
+  background:#252530;flex-shrink:0;
 }
 .movie-info{flex:1;min-width:0}
-.movie-info h3{font-size:15px;margin:0 0 6px}
-.movie-info p{font-size:12px;color:#aaa;margin:0 0 10px}
-.actions{display:flex;gap:7px;flex-wrap:wrap}
-.actions button{padding:8px 11px;font-size:12px}
-.hidden{display:none!important}
-.note{color:#aaa;font-size:12px;line-height:1.6}
+.movie-info h3{margin:0 0 6px;overflow-wrap:anywhere}
+.movie-info p{font-size:12px;color:var(--muted);margin:0 0 9px}
+.movie-actions{display:flex;gap:7px;flex-wrap:wrap}
+.movie-actions button{padding:8px 10px;font-size:11px}
+.status{font-size:13px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere}
+.empty{
+  padding:25px 10px;text-align:center;color:var(--muted);
+  border:1px dashed var(--border);border-radius:10px;font-size:13px;
+}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);font-size:12px}
+th{color:var(--muted);font-weight:600}
+td{overflow-wrap:anywhere}
+.small-btn{padding:7px 9px;font-size:11px}
+footer{text-align:center;color:#747484;font-size:11px;padding:15px}
+.login-wrap{max-width:440px;margin:50px auto}
+.login-logo{text-align:center;font-size:31px;font-weight:900;margin-bottom:22px}
+.login-logo span{color:var(--red)}
+.preview-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;margin-top:10px;
+}
+.preview-grid img{
+  width:100%;height:105px;object-fit:cover;border-radius:8px;
+  background:#222;
+}
+@media(max-width:760px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .container{padding:13px}
+  header{padding:13px}
+  .badge{display:none}
+}
+@media(max-width:430px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .stat{padding:13px}
+  .stat-number{font-size:23px}
+  .panel{padding:14px}
+  .movie{align-items:flex-start}
+  .movie img{width:53px;height:76px}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">FLIXORA</div>
-  <button id="logoutBtn" class="secondary hidden">Logout</button>
+  <div class="logo">FLIX<span>ORA</span></div>
+  <div class="header-right">
+    <span class="badge">● ADMIN PANEL</span>
+    <button id="logoutBtn" class="secondary hidden">Logout</button>
+  </div>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <section id="loginPanel" class="panel">
+  <!-- LOGIN -->
+  <section id="loginPanel" class="login-wrap panel">
+    <div class="login-logo">FLIX<span>ORA</span></div>
     <h2>Admin Login 🔐</h2>
-    <p class="note">Sign in with your authorized administrator account.</p>
+    <p class="note">Apne authorized administrator account se login karein.</p>
 
     <form id="loginForm">
-      <label for="email">Email</label>
+      <label for="email">Email Address</label>
       <input id="email" type="email" autocomplete="username"
              required placeholder="Admin email">
 
@@ -109,125 +183,304 @@ button:disabled{opacity:.5}
              autocomplete="current-password"
              required placeholder="Password">
 
-      <button id="loginBtn" class="full" type="submit">Login</button>
+      <button id="loginBtn" class="full" style="width:100%;margin-top:17px">
+        Login Karein
+      </button>
     </form>
-
     <div id="loginStatus" class="status" role="status"></div>
   </section>
 
+  <!-- DASHBOARD -->
   <section id="dashboard" class="hidden">
 
-    <div class="panel">
-      <h2 id="formTitle">Add New Movie 🎬</h2>
-
-      <form id="movieForm">
-        <label for="title">Movie Name *</label>
-        <input id="title" maxlength="150" required
-               placeholder="Movie title">
-
-        <label for="year">Release Year *</label>
-        <input id="year" type="number" min="1888" max="2100"
-               required placeholder="2026">
-
-        <label for="genre">Genre *</label>
-        <select id="genre" required>
-          <option value="">Select genre</option>
-          <option>Action</option>
-          <option>Adventure</option>
-          <option>Animation</option>
-          <option>Comedy</option>
-          <option>Crime</option>
-          <option>Documentary</option>
-          <option>Drama</option>
-          <option>Family</option>
-          <option>Fantasy</option>
-          <option>Horror</option>
-          <option>Romance</option>
-          <option>Sci-Fi</option>
-          <option>Thriller</option>
-          <option>Other</option>
-        </select>
-
-        <label for="poster">Poster Image URL</label>
-        <input id="poster" type="url" maxlength="1000"
-               placeholder="https://example.com/poster.jpg">
-
-        <label for="description">Description</label>
-        <textarea id="description" maxlength="3000"
-                  placeholder="Movie description"></textarea>
-
-        <label for="direct">Direct Download URL</label>
-        <input id="direct" type="url" maxlength="2000"
-               placeholder="https://...">
-
-        <label for="drive">Google Drive URL</label>
-        <input id="drive" type="url" maxlength="2000"
-               placeholder="https://drive.google.com/...">
-
-        <label for="mediafire">MediaFire URL</label>
-        <input id="mediafire" type="url" maxlength="2000"
-               placeholder="https://www.mediafire.com/...">
-
-        <label for="mega">MEGA URL</label>
-        <input id="mega" type="url" maxlength="2000"
-               placeholder="https://mega.nz/...">
-
-        <button id="saveBtn" class="full" type="submit">
-          Save Movie
-        </button>
-
-        <button id="cancelEditBtn" class="full secondary hidden"
-                type="button">Cancel Edit</button>
-
-        <div id="movieStatus" class="status" role="status"></div>
-      </form>
-
-      <p class="note">
-        Add only content you own or are authorized to distribute.
-        Links must be valid HTTPS URLs.
-      </p>
+    <div class="section-head">
+      <div>
+        <h1>Admin Dashboard 👋</h1>
+        <div class="muted">Flixora website ka control center</div>
+      </div>
+      <button id="refreshBtn" class="secondary">↻ Refresh</button>
     </div>
 
-    <div class="panel">
-      <h2>Manage Movies</h2>
-      <input id="movieSearch" type="search"
-             placeholder="Search movie titles...">
-      <div id="movieList"></div>
-      <div id="listStatus" class="status" role="status"></div>
-    </div>
+    <nav class="tabs" aria-label="Admin menu">
+      <button class="tab active" data-tab="overview">📊 Dashboard</button>
+      <button class="tab" data-tab="movies">🎬 Movies</button>
+      <button class="tab" data-tab="users">👥 Users</button>
+      <button class="tab" data-tab="analytics">📈 Analytics</button>
+      <button class="tab" data-tab="settings">⚙️ Settings</button>
+    </nav>
+
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="tab-content">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-icon">🎬</div>
+          <div id="totalMovies" class="stat-number">—</div>
+          <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">👥</div>
+          <div id="totalUsers" class="stat-number">—</div>
+          <div class="stat-label">Registered Users</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">👁️</div>
+          <div id="todayViews" class="stat-number">—</div>
+          <div class="stat-label">Aaj ke Page Views</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🌐</div>
+          <div id="totalViews" class="stat-number">—</div>
+          <div class="stat-label">Total Page Views</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-head">
+          <h2>Recent Movies</h2>
+          <button class="small-btn" data-open-tab="movies">Manage Movies →</button>
+        </div>
+        <div id="recentMovies" class="empty">Data load ho raha hai...</div>
+      </div>
+
+      <div class="panel">
+        <h2>System Status</h2>
+        <p class="note">Firebase Admin verification:
+          <strong class="success">Connected</strong>
+        </p>
+        <p class="note">Analytics aur user counts tabhi real honge jab
+          website tracking aur user registration records configure honge.
+        </p>
+        <div id="overviewStatus" class="status"></div>
+      </div>
+    </section>
+
+    <!-- MOVIES -->
+    <section id="tab-movies" class="tab-content hidden">
+
+      <div class="panel">
+        <h2 id="formTitle">🎬 Nayi Movie Add Karein</h2>
+
+        <form id="movieForm">
+          <div class="grid">
+            <div>
+              <label for="title">Movie Name *</label>
+              <input id="title" maxlength="150" required
+                     placeholder="Movie ka naam">
+            </div>
+            <div>
+              <label for="year">Release Year *</label>
+              <input id="year" type="number" min="1888" max="2100"
+                     required placeholder="2026">
+            </div>
+            <div>
+              <label for="genre">Genre *</label>
+              <select id="genre" required>
+                <option value="">Genre chunein</option>
+                <option>Action</option><option>Adventure</option>
+                <option>Animation</option><option>Comedy</option>
+                <option>Crime</option><option>Documentary</option>
+                <option>Drama</option><option>Family</option>
+                <option>Fantasy</option><option>Horror</option>
+                <option>Romance</option><option>Sci-Fi</option>
+                <option>Thriller</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="language">Language</label>
+              <select id="language">
+                <option value="">Language chunein</option>
+                <option>Hindi</option><option>English</option>
+                <option>Tamil</option><option>Telugu</option>
+                <option>Malayalam</option><option>Kannada</option>
+                <option>Punjabi</option><option>Bengali</option>
+                <option>Marathi</option><option>Japanese</option>
+                <option>Korean</option><option>Multi Audio</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="quality">Video Quality</label>
+              <select id="quality">
+                <option value="">Quality chunein</option>
+                <option>480p</option><option>720p HD</option>
+                <option>1080p Full HD</option><option>1440p 2K</option>
+                <option>2160p 4K</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="fileSize">File Size</label>
+              <input id="fileSize" maxlength="40"
+                     placeholder="Jaise 1.2 GB">
+            </div>
+            <div class="full">
+              <label for="poster">Poster Image URL</label>
+              <input id="poster" type="url" maxlength="1000"
+                     placeholder="https://example.com/poster.jpg">
+            </div>
+            <div class="full">
+              <label for="description">Movie Description</label>
+              <textarea id="description" maxlength="3000"
+                        placeholder="Movie ki kahani aur details"></textarea>
+            </div>
+          </div>
+
+          <h3>🖼️ Screenshots Gallery</h3>
+          <p class="note">Movie details page par dikhane ke liye screenshot URLs daalein.</p>
+          <div class="grid">
+            <div><label for="screenshot1">Screenshot 1 URL</label>
+              <input id="screenshot1" type="url" maxlength="1000" placeholder="https://..."></div>
+            <div><label for="screenshot2">Screenshot 2 URL</label>
+              <input id="screenshot2" type="url" maxlength="1000" placeholder="https://..."></div>
+            <div><label for="screenshot3">Screenshot 3 URL</label>
+              <input id="screenshot3" type="url" maxlength="1000" placeholder="https://..."></div>
+            <div><label for="screenshot4">Screenshot 4 URL</label>
+              <input id="screenshot4" type="url" maxlength="1000" placeholder="https://..."></div>
+          </div>
+
+          <h3 style="margin-top:22px">🔗 Download Links</h3>
+          <div class="grid">
+            <div><label for="direct">Direct Download URL</label>
+              <input id="direct" type="url" maxlength="2000" placeholder="https://..."></div>
+            <div><label for="drive">Google Drive URL</label>
+              <input id="drive" type="url" maxlength="2000" placeholder="https://drive.google.com/..."></div>
+            <div><label for="mediafire">MediaFire URL</label>
+              <input id="mediafire" type="url" maxlength="2000" placeholder="https://www.mediafire.com/..."></div>
+            <div><label for="mega">MEGA URL</label>
+              <input id="mega" type="url" maxlength="2000" placeholder="https://mega.nz/..."></div>
+          </div>
+
+          <div class="actions">
+            <button id="saveBtn" type="submit">💾 Movie Save Karein</button>
+            <button id="cancelEditBtn" type="button" class="secondary hidden">
+              Cancel Edit
+            </button>
+          </div>
+          <div id="movieStatus" class="status" role="status"></div>
+        </form>
+        <p class="note">Sirf wahi content publish karein jise distribute karne ka aapko adhikar hai.</p>
+      </div>
+
+      <div class="panel">
+        <div class="section-head">
+          <h2>🎞️ Movie Library</h2>
+          <span id="movieCount" class="muted"></span>
+        </div>
+        <input id="movieSearch" type="search" placeholder="Movie naam se search karein...">
+        <div id="movieList" style="margin-top:10px"></div>
+        <div id="listStatus" class="status" role="status"></div>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section id="tab-users" class="tab-content hidden">
+      <div class="panel">
+        <h2>👥 Registered Users</h2>
+        <p class="note">
+          Yahan users collection mein maujood records dikhte hain.
+          Firebase Authentication accounts apne aap is list mein nahi aate.
+        </p>
+        <input id="userSearch" type="search" placeholder="Username ya email search karein...">
+        <div class="table-wrap" style="margin-top:15px">
+          <table>
+            <thead><tr><th>Username</th><th>Email</th><th>Joined</th></tr></thead>
+            <tbody id="userTable">
+              <tr><td colspan="3">Data load ho raha hai...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="usersStatus" class="status"></div>
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="tab-analytics" class="tab-content hidden">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-icon">👁️</div>
+          <div id="analyticsToday" class="stat-number">—</div>
+          <div class="stat-label">Aaj ke Page Views</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">📅</div>
+          <div id="analyticsAll" class="stat-number">—</div>
+          <div class="stat-label">Total Page Views</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🎬</div>
+          <div id="analyticsMovies" class="stat-number">—</div>
+          <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">👥</div>
+          <div id="analyticsUsers" class="stat-number">—</div>
+          <div class="stat-label">User Records</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>🔥 Most Viewed Movies</h2>
+        <p class="note">Ye ranking pageViews collection ke movieId records par based hai.</p>
+        <div id="popularMovies" class="empty">Analytics load ho raha hai...</div>
+      </div>
+
+      <div class="panel">
+        <h2>📈 Analytics Status</h2>
+        <p class="note">
+          Agar views 0 hain, to iska matlab zaroori nahi ki website par visitors nahi aaye.
+          Ho sakta hai website ka tracking code abhi connect na hua ho.
+          Ye dashboard unique visitors ya clicks ko tab tak count nahi karega
+          jab tak unke liye alag tracking data implement na ho.
+        </p>
+        <div id="analyticsStatus" class="status"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="tab-content hidden">
+      <div class="panel">
+        <h2>⚙️ Website Settings</h2>
+        <form id="settingsForm">
+          <label for="siteName">Website Name</label>
+          <input id="siteName" maxlength="80" value="Flixora" required>
+
+          <label for="siteTagline">Website Tagline</label>
+          <input id="siteTagline" maxlength="180"
+                 placeholder="Your entertainment destination">
+
+          <button type="submit" style="margin-top:17px">Settings Save Karein</button>
+          <div id="settingsStatus" class="status"></div>
+        </form>
+        <p class="note">
+          Ye settings Firestore ke settings/site document mein save hongi.
+          User website par inka asar dikhane ke liye index.html mein bhi settings read karni hongi.
+        </p>
+      </div>
+    </section>
 
   </section>
-</div>
+</main>
+
+<footer>FLIXORA ADMIN • Secure dashboard • Authorized content only</footer>
 
 <script type="module">
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp
+  getFirestore, collection, doc, getDoc, getDocs,
+  addDoc, updateDoc, deleteDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Replace these values with your Firebase Web App config. */
+/* Firebase Project Settings se values verify kar lena. */
 const firebaseConfig = {
   apiKey: "AIzaSyBiLEWdoL9wstA1gB_D2oJaryfUuNZ_Dk8",
-  authDomain: "http://flixora-32e7c.firebaseapp.com",
+  authDomain: "flixora-32e7c.firebaseapp.com",
   projectId: "flixora-32e7c",
-  storageBucket: "http://flixora-32e7c.firebasestorage.app",
+  storageBucket: "flixora-32e7c.firebasestorage.app",
   messagingSenderId: "306452549829",
   appId: "1:306452549829:web:e5feebaf33ded56cffe0ac"
 };
@@ -235,41 +488,92 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const $ = id => document.getElementById(id);
 
-let editingId = null;
 let movies = [];
+let users = [];
+let pageViews = [];
+let editingId = null;
 let busy = false;
 
-function status(id, message) {
-  $(id).textContent = message;
-}
+const movieFields = [
+  "title","year","genre","language","quality","fileSize",
+  "poster","description","screenshot1","screenshot2",
+  "screenshot3","screenshot4","direct","drive","mediafire","mega"
+];
 
+function message(id, text) {
+  $(id).textContent = text;
+}
+function safe(value) {
+  return String(value ?? "");
+}
 function setBusy(value) {
   busy = value;
   $("loginBtn").disabled = value;
   $("saveBtn").disabled = value;
 }
-
-function validOptionalUrl(value) {
+function validUrl(value) {
   if (!value) return true;
-
   try {
-    const url = new URL(value);
-    return url.protocol === "https:";
+    return new URL(value).protocol === "https:";
   } catch {
     return false;
   }
 }
+function formatDate(value) {
+  if (!value) return "—";
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString("en-IN");
+}
+function timestampDate(value) {
+  if (!value) return null;
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+function isToday(value) {
+  const date = timestampDate(value);
+  if (!date) return false;
+  const now = new Date();
+  return date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+}
+function makeEmpty(text) {
+  const div = document.createElement("div");
+  div.className = "empty";
+  div.textContent = text;
+  return div;
+}
+function setTab(tabName) {
+  document.querySelectorAll(".tab").forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === tabName);
+  });
+  document.querySelectorAll(".tab-content").forEach(section => {
+    section.classList.toggle("hidden", section.id !== "tab-" + tabName);
+  });
+}
+document.querySelectorAll(".tab").forEach(button => {
+  button.addEventListener("click", () => setTab(button.dataset.tab));
+});
+document.querySelectorAll("[data-open-tab]").forEach(button => {
+  button.addEventListener("click", () => setTab(button.dataset.openTab));
+});
 
 function getMovieData() {
   const data = {
     title: $("title").value.trim(),
     year: Number($("year").value),
     genre: $("genre").value,
+    language: $("language").value,
+    quality: $("quality").value,
+    fileSize: $("fileSize").value.trim(),
     poster: $("poster").value.trim(),
     description: $("description").value.trim(),
+    screenshot1: $("screenshot1").value.trim(),
+    screenshot2: $("screenshot2").value.trim(),
+    screenshot3: $("screenshot3").value.trim(),
+    screenshot4: $("screenshot4").value.trim(),
     direct: $("direct").value.trim(),
     drive: $("drive").value.trim(),
     mediafire: $("mediafire").value.trim(),
@@ -279,31 +583,39 @@ function getMovieData() {
   if (!data.title || !data.genre ||
       !Number.isInteger(data.year) ||
       data.year < 1888 || data.year > 2100) {
-    throw new Error("Movie name, valid year aur genre bharo.");
+    throw new Error("Movie ka naam, valid year aur genre bharein.");
   }
 
   for (const key of [
-    "poster", "direct", "drive", "mediafire", "mega"
+    "poster","screenshot1","screenshot2","screenshot3","screenshot4",
+    "direct","drive","mediafire","mega"
   ]) {
-    if (!validOptionalUrl(data[key])) {
-      throw new Error(key + " URL HTTPS hona chahiye.");
+    if (!validUrl(data[key])) {
+      throw new Error(key + " mein valid HTTPS URL daalein.");
     }
   }
-
   return data;
 }
 
-function resetForm() {
+function resetMovieForm() {
   editingId = null;
   $("movieForm").reset();
-  $("formTitle").textContent = "Add New Movie 🎬";
-  $("saveBtn").textContent = "Save Movie";
+  $("formTitle").textContent = "🎬 Nayi Movie Add Karein";
+  $("saveBtn").textContent = "💾 Movie Save Karein";
   $("cancelEditBtn").classList.add("hidden");
-  status("movieStatus", "");
+  message("movieStatus", "");
 }
-
-function escapeText(value) {
-  return String(value ?? "");
+function startEdit(movie) {
+  editingId = movie.id;
+  movieFields.forEach(key => {
+    $(key).value = movie[key] ?? "";
+  });
+  $("formTitle").textContent = "✏️ Movie Edit Karein";
+  $("saveBtn").textContent = "Update Movie";
+  $("cancelEditBtn").classList.remove("hidden");
+  message("movieStatus", "Editing: " + safe(movie.title));
+  setTab("movies");
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function renderMovies() {
@@ -312,15 +624,17 @@ function renderMovies() {
   list.replaceChildren();
 
   const filtered = movies.filter(movie =>
-    escapeText(movie.title).toLowerCase().includes(query)
+    safe(movie.title).toLowerCase().includes(query)
   );
+  $("movieCount").textContent = movies.length + " movies";
 
   if (!filtered.length) {
-    status("listStatus", "No movies found.");
+    list.append(makeEmpty("Koi movie nahi mili."));
+    message("listStatus", "");
     return;
   }
 
-  status("listStatus", filtered.length + " movie(s)");
+  message("listStatus", filtered.length + " movie(s) dikh rahi hain.");
 
   for (const movie of filtered) {
     const row = document.createElement("div");
@@ -329,23 +643,23 @@ function renderMovies() {
     const img = document.createElement("img");
     img.alt = "Movie poster";
     img.loading = "lazy";
-
-    if (validOptionalUrl(movie.poster) && movie.poster) {
-      img.src = movie.poster;
-    }
+    img.src = validUrl(movie.poster) && movie.poster ? movie.poster : "";
+    img.onerror = () => { img.removeAttribute("src"); };
 
     const info = document.createElement("div");
     info.className = "movie-info";
 
     const title = document.createElement("h3");
-    title.textContent = escapeText(movie.title);
+    title.textContent = safe(movie.title);
 
     const detail = document.createElement("p");
-    detail.textContent =
-      escapeText(movie.year) + " · " + escapeText(movie.genre);
+    detail.textContent = [
+      safe(movie.year), safe(movie.genre),
+      safe(movie.quality), safe(movie.language)
+    ].filter(Boolean).join(" · ");
 
     const actions = document.createElement("div");
-    actions.className = "actions";
+    actions.className = "movie-actions";
 
     const edit = document.createElement("button");
     edit.type = "button";
@@ -353,111 +667,231 @@ function renderMovies() {
     edit.textContent = "Edit";
     edit.addEventListener("click", () => startEdit(movie));
 
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "danger";
-    remove.textContent = "Delete";
-    remove.addEventListener("click", () => removeMovie(movie));
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "danger";
+    del.textContent = "Delete";
+    del.addEventListener("click", () => removeMovie(movie));
 
-    actions.append(edit, remove);
+    actions.append(edit, del);
     info.append(title, detail, actions);
     row.append(img, info);
     list.append(row);
   }
 }
 
-function startEdit(movie) {
-  editingId = movie.id;
+function renderRecentMovies() {
+  const root = $("recentMovies");
+  root.replaceChildren();
+  const recent = movies.slice(0, 5);
 
-  $("title").value = movie.title ?? "";
-  $("year").value = movie.year ?? "";
-  $("genre").value = movie.genre ?? "";
-  $("poster").value = movie.poster ?? "";
-  $("description").value = movie.description ?? "";
-  $("direct").value = movie.direct ?? "";
-  $("drive").value = movie.drive ?? "";
-  $("mediafire").value = movie.mediafire ?? "";
-  $("mega").value = movie.mega ?? "";
+  if (!recent.length) {
+    root.append(makeEmpty("Abhi movies add nahi ki gayi hain."));
+    return;
+  }
 
-  $("formTitle").textContent = "Edit Movie ✏️";
-  $("saveBtn").textContent = "Update Movie";
-  $("cancelEditBtn").classList.remove("hidden");
-  status("movieStatus", "Editing: " + movie.title);
+  for (const movie of recent) {
+    const row = document.createElement("div");
+    row.className = "movie";
+    const img = document.createElement("img");
+    img.alt = "Poster";
+    img.src = validUrl(movie.poster) && movie.poster ? movie.poster : "";
+    img.onerror = () => img.removeAttribute("src");
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+    const info = document.createElement("div");
+    info.className = "movie-info";
+    const title = document.createElement("h3");
+    title.textContent = safe(movie.title);
+    const detail = document.createElement("p");
+    detail.textContent = safe(movie.year) + " · " +
+      safe(movie.quality || "Quality not set");
+    info.append(title, detail);
+    row.append(img, info);
+    root.append(row);
+  }
 }
 
 async function loadMovies() {
-  status("listStatus", "Loading movies...");
-
+  message("listStatus", "Movies load ho rahi hain...");
   try {
-    const snapshot = await getDocs(collection(db, "movies"));
-    movies = snapshot.docs.map(item => ({
-      id: item.id,
-      ...item.data()
-    }));
-
-    movies.sort((a, b) =>
-      escapeText(a.title).localeCompare(escapeText(b.title))
-    );
-
+    const snap = await getDocs(collection(db, "movies"));
+    movies = snap.docs.map(item => ({id:item.id, ...item.data()}));
+    movies.sort((a,b) => safe(b.createdAt?.seconds).localeCompare(safe(a.createdAt?.seconds)));
     renderMovies();
+    renderRecentMovies();
+    $("totalMovies").textContent = movies.length;
+    $("analyticsMovies").textContent = movies.length;
   } catch (error) {
     console.error(error);
-    status("listStatus",
-      "Movies load nahi hue. Firestore Rules aur connection check karo.");
+    message("listStatus", "Movies load nahi hui. Firestore Rules check karein.");
+    $("recentMovies").replaceChildren(makeEmpty("Movie data available nahi hai."));
   }
 }
 
 async function removeMovie(movie) {
-  if (busy) return;
-
-  if (!confirm('Delete "' + movie.title + '"?')) return;
+  if (busy || !auth.currentUser) return;
+  if (!confirm('"' + safe(movie.title) + '" delete karni hai?')) return;
 
   setBusy(true);
-
   try {
     await deleteDoc(doc(db, "movies", movie.id));
-    status("movieStatus", "Movie deleted.");
+    message("movieStatus", "Movie delete ho gayi.");
     await loadMovies();
+    await loadAnalytics();
   } catch (error) {
     console.error(error);
-    status("movieStatus",
-      "Delete failed. Admin permissions aur Rules check karo.");
+    message("movieStatus", "Delete failed. Admin permissions check karein.");
   } finally {
     setBusy(false);
   }
 }
 
-$("loginForm").addEventListener("submit", async event => {
+async function loadUsers() {
+  const tbody = $("userTable");
+  tbody.replaceChildren();
+
+  try {
+    const snap = await getDocs(collection(db, "users"));
+    users = snap.docs.map(item => ({id:item.id, ...item.data()}));
+    $("totalUsers").textContent = users.length;
+    $("analyticsUsers").textContent = users.length;
+    renderUsers();
+  } catch (error) {
+    console.error(error);
+    $("totalUsers").textContent = "—";
+    $("analyticsUsers").textContent = "—";
+    tbody.append(makeUserRow("Users data unavailable — Rules check karein.", "", ""));
+    message("usersStatus", "Users collection read nahi hui. Yeh Firebase Auth ki complete user list nahi hai.");
+  }
+}
+function makeUserRow(name, email, date) {
+  const tr = document.createElement("tr");
+  [name,email,date].forEach(value => {
+    const td = document.createElement("td");
+    td.textContent = safe(value);
+    tr.append(td);
+  });
+  return tr;
+}
+function renderUsers() {
+  const tbody = $("userTable");
+  tbody.replaceChildren();
+  const query = $("userSearch").value.trim().toLowerCase();
+  const filtered = users.filter(user =>
+    (safe(user.username) + " " + safe(user.email)).toLowerCase().includes(query)
+  );
+  if (!filtered.length) {
+    tbody.append(makeUserRow("Koi user record nahi mila.", "", ""));
+    return;
+  }
+  for (const user of filtered) {
+    tbody.append(makeUserRow(
+      user.username || user.displayName || "—",
+      user.email || "—",
+      formatDate(user.createdAt)
+    ));
+  }
+  message("usersStatus", filtered.length + " user record(s).");
+}
+
+async function loadAnalytics() {
+  try {
+    const snap = await getDocs(collection(db, "pageViews"));
+    pageViews = snap.docs.map(item => ({id:item.id, ...item.data()}));
+    const todayCount = pageViews.filter(view => isToday(view.createdAt)).length;
+
+    $("todayViews").textContent = todayCount;
+    $("totalViews").textContent = pageViews.length;
+    $("analyticsToday").textContent = todayCount;
+    $("analyticsAll").textContent = pageViews.length;
+
+    const counts = new Map();
+    for (const view of pageViews) {
+      if (view.movieId) {
+        counts.set(view.movieId, (counts.get(view.movieId) || 0) + 1);
+      }
+    }
+
+    const popular = [...counts.entries()]
+      .sort((a,b) => b[1] - a[1])
+      .slice(0,10);
+    const root = $("popularMovies");
+    root.replaceChildren();
+
+    if (!pageViews.length) {
+      root.append(makeEmpty(
+        "Abhi pageViews data nahi mila. Website tracking connect karna baaki ho sakta hai."
+      ));
+      message("analyticsStatus",
+        "Tracking records nahi mile. Abhi views ko zero/unknown samjhein, confirmed visitor count nahi.");
+      return;
+    }
+
+    if (!popular.length) {
+      root.append(makeEmpty("Views records hain, lekin movieId records nahi hain."));
+    } else {
+      for (const [movieId, count] of popular) {
+        const movie = movies.find(item => item.id === movieId);
+        const row = document.createElement("div");
+        row.className = "movie";
+        const info = document.createElement("div");
+        info.className = "movie-info";
+        const title = document.createElement("h3");
+        title.textContent = movie ? safe(movie.title) : "Movie ID: " + movieId;
+        const detail = document.createElement("p");
+        detail.textContent = count + " page view(s)";
+        info.append(title, detail);
+        row.append(info);
+        root.append(row);
+      }
+    }
+    message("analyticsStatus",
+      "Page views: " + pageViews.length + ". Unique visitors aur link clicks alag tracking ke bina available nahi hain.");
+  } catch (error) {
+    console.error(error);
+    $("todayViews").textContent = "—";
+    $("totalViews").textContent = "—";
+    $("analyticsToday").textContent = "—";
+    $("analyticsAll").textContent = "—";
+    $("popularMovies").replaceChildren(makeEmpty(
+      "Analytics collection read nahi hui. Rules aur tracking setup check karein."
+    ));
+    message("analyticsStatus", "Analytics data abhi available nahi hai.");
+  }
+}
+
+async function loadSettings() {
+  try {
+    const snap = await getDoc(doc(db, "settings", "site"));
+    if (snap.exists()) {
+      const data = snap.data();
+      $("siteName").value = data.siteName || "Flixora";
+      $("siteTagline").value = data.siteTagline || "";
+    }
+  } catch (error) {
+    console.error(error);
+    message("settingsStatus", "Settings read nahi hui. Firestore Rules check karein.");
+  }
+}
+
+$("settingsForm").addEventListener("submit", async event => {
   event.preventDefault();
-  if (busy) return;
+  if (!auth.currentUser || busy) return;
 
   setBusy(true);
-  status("loginStatus", "Signing in...");
-
   try {
-    await signInWithEmailAndPassword(
-      auth,
-      $("email").value.trim(),
-      $("password").value
-    );
-    // Admin authorization is checked again by onAuthStateChanged.
+    await setDoc(doc(db, "settings", "site"), {
+      siteName: $("siteName").value.trim(),
+      siteTagline: $("siteTagline").value.trim(),
+      updatedAt: serverTimestamp()
+    }, {merge:true});
+    message("settingsStatus",
+      "Settings save ho gayi. User website par apply karne ke liye index.html integration bhi chahiye.");
   } catch (error) {
     console.error(error);
-    status("loginStatus", "Login failed. Email/password check karo.");
+    message("settingsStatus", "Settings save nahi hui. Firestore Rules check karein.");
   } finally {
     setBusy(false);
-  }
-});
-
-$("logoutBtn").addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    resetForm();
-  } catch (error) {
-    console.error(error);
-    alert("Logout nahi hua. Dobara try karo.");
   }
 });
 
@@ -466,38 +900,67 @@ $("movieForm").addEventListener("submit", async event => {
   if (busy || !auth.currentUser) return;
 
   setBusy(true);
-
   try {
     const data = getMovieData();
 
     if (editingId) {
       await updateDoc(doc(db, "movies", editingId), {
-        ...data,
-        updatedAt: serverTimestamp()
+        ...data, updatedAt: serverTimestamp()
       });
-      status("movieStatus", "Movie updated successfully.");
+      message("movieStatus", "Movie successfully update ho gayi.");
     } else {
       await addDoc(collection(db, "movies"), {
-        ...data,
-        createdAt: serverTimestamp()
+        ...data, createdAt: serverTimestamp()
       });
-      status("movieStatus", "Movie added successfully.");
+      message("movieStatus", "Nayi movie successfully add ho gayi.");
     }
 
-    resetForm();
+    resetMovieForm();
     await loadMovies();
-
+    await loadAnalytics();
   } catch (error) {
     console.error(error);
-    status("movieStatus",
-      error.message || "Save failed. Rules aur connection check karo.");
+    message("movieStatus", error.message || "Save nahi hua. Rules check karein.");
   } finally {
     setBusy(false);
   }
 });
 
-$("cancelEditBtn").addEventListener("click", resetForm);
+$("cancelEditBtn").addEventListener("click", resetMovieForm);
 $("movieSearch").addEventListener("input", renderMovies);
+$("userSearch").addEventListener("input", renderUsers);
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy) return;
+  setBusy(true);
+  message("loginStatus", "Login ho raha hai...");
+
+  try {
+    await signInWithEmailAndPassword(
+      auth, $("email").value.trim(), $("password").value
+    );
+  } catch (error) {
+    console.error(error);
+    message("loginStatus", "Login failed. Email/password check karein.");
+  } finally {
+    setBusy(false);
+  }
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    resetMovieForm();
+  } catch (error) {
+    console.error(error);
+    alert("Logout nahi hua. Dobara try karein.");
+  }
+});
+
+$("refreshBtn").addEventListener("click", async () => {
+  await Promise.all([loadMovies(), loadUsers(), loadAnalytics(), loadSettings()]);
+});
 
 onAuthStateChanged(auth, async user => {
   $("loginPanel").classList.remove("hidden");
@@ -505,34 +968,32 @@ onAuthStateChanged(auth, async user => {
   $("logoutBtn").classList.add("hidden");
 
   if (!user) {
-    status("loginStatus", "Admin account se login karo.");
+    message("loginStatus", "Authorized admin account se login karein.");
     return;
   }
 
   try {
-    const adminRef = doc(db, "admins", user.uid);
-    const adminSnapshot = await getDoc(adminRef);
-
-    if (!adminSnapshot.exists() ||
-        adminSnapshot.data().role !== "admin") {
+    const adminSnapshot = await getDoc(doc(db, "admins", user.uid));
+    if (!adminSnapshot.exists() || adminSnapshot.data().role !== "admin") {
       await signOut(auth);
-      status("loginStatus", "Access denied: authorized admin nahi hai.");
+      message("loginStatus", "Access denied: aap authorized admin nahi hain.");
       return;
     }
 
     $("loginPanel").classList.add("hidden");
     $("dashboard").classList.remove("hidden");
     $("logoutBtn").classList.remove("hidden");
+    message("overviewStatus", "Admin verification successful.");
 
-    await loadMovies();
-
+    await Promise.all([
+      loadMovies(), loadUsers(), loadAnalytics(), loadSettings()
+    ]);
   } catch (error) {
     console.error(error);
-    status("loginStatus",
-      "Admin verification failed. Firestore Rules check karo.");
+    message("loginStatus",
+      "Admin verification failed. Firebase config aur Firestore Rules check karein.");
   }
 });
 </script>
-
 </body>
-</html>
+                   </html>
