@@ -3,80 +3,666 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flixora — Movies & More</title>
+<meta name="theme-color" content="#090909">
+<meta name="description" content="Explore movies on Flixora. Discover movie details, quality, file sizes and available download options.">
+<title>FLIXORA — Premium Cinema</title>
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;background:#0b0b10;color:#fff;
-  font-family:Arial,sans-serif
+:root {
+  --bg: #080808;
+  --panel: #111111;
+  --panel2: #171313;
+  --red: #ff263f;
+  --red2: #b80020;
+  --text: #f7f4f4;
+  --muted: #a49b9d;
+  --border: rgba(255, 38, 63, .19);
 }
-header{
-  padding:17px 20px;background:#15151d;
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px solid #292933
+
+* {
+  box-sizing: border-box;
 }
-.logo{font-size:25px;font-weight:bold;color:#ff3155}
-.tag{font-size:11px;background:#292933;padding:8px 10px;border-radius:20px}
-.hero{
-  padding:35px 20px;
-  background:linear-gradient(135deg,#411326,#14141c 75%)
+
+html {
+  scroll-behavior: smooth;
 }
-.hero h1{font-size:32px;margin:0 0 12px}
-.hero p{color:#ccc;line-height:1.6;margin-bottom:0}
-.search{padding:18px 16px 8px}
-input{
-  width:100%;padding:14px;border-radius:10px;
-  background:#17171f;color:#fff;border:1px solid #333;
-  font-size:15px
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% -15%, #401018 0, transparent 43%),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
-.section-title{padding:0 17px;margin-top:22px;font-size:20px}
-#status{padding:5px 17px;color:#aaa;font-size:13px}
-.grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;padding:10px 13px 25px
+
+button, input {
+  font: inherit;
 }
-.card{
-  background:#17171f;border:1px solid #292933;
-  border-radius:12px;overflow:hidden;min-width:0
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
 }
-.poster{
-  width:100%;height:210px;object-fit:cover;
-  background:linear-gradient(145deg,#39172b,#171721);
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
-.info{padding:12px}
-.info h3{font-size:15px;margin:0 0 7px;overflow-wrap:anywhere}
-.meta{font-size:12px;color:#aaa;margin:0 0 10px}
-.description{
-  font-size:12px;color:#ccc;line-height:1.5;
-  margin-bottom:12px;overflow-wrap:anywhere
+
+button {
+  cursor: pointer;
 }
-button{
-  background:#ff3155;color:#fff;border:0;border-radius:8px;
-  padding:11px;width:100%;font-weight:bold;cursor:pointer
+
+.hidden {
+  display: none !important;
 }
-.details{margin-top:8px;background:#292933}
-footer{text-align:center;padding:25px;color:#888;font-size:12px}
-.modal{
-  position:fixed;inset:0;background:#000c;display:none;
-  align-items:center;justify-content:center;padding:18px;z-index:10
+
+/* HEADER */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 68px;
+  padding: 0 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(9, 9, 9, .94);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(18px);
 }
-.modal-box{
-  width:100%;max-width:420px;max-height:85vh;overflow:auto;
-  background:#171720;border:1px solid #333;border-radius:14px;padding:20px
+
+.logo {
+  font-size: 25px;
+  font-weight: 1000;
+  letter-spacing: 2px;
 }
-.modal-box h2{margin-top:0}
-.download-link{display:block;margin:10px 0;text-decoration:none}
-.download-link button{background:#ff3155}
-.close{background:#33333e;margin-top:10px}
-.empty{grid-column:1/-1;text-align:center;padding:30px 10px;color:#aaa}
-.hidden{display:none!important}
-@media(min-width:650px){
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:15px 20px}
-  .poster{height:270px}
-  .hero{padding:50px 30px}
+
+.logo span {
+  color: var(--red);
+  text-shadow: 0 0 20px #ff263f55;
+}
+
+.logo small {
+  display: block;
+  color: #8f8587;
+  font-size: 8px;
+  letter-spacing: 4px;
+  margin-top: 2px;
+}
+
+.header-badge {
+  padding: 8px 12px;
+  color: #ff6576;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  background: #1a0b0e;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+/* HOME HERO */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 42px 5% 36px;
+  border-bottom: 1px solid #ffffff08;
+  background:
+    linear-gradient(110deg, #21080d 0%, #100a0b 48%, #090909 100%);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  right: -100px;
+  top: -100px;
+  border: 1px solid #ff263f28;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 25px #ff263f08,
+    0 0 0 55px #ff263f05;
+  pointer-events: none;
+}
+
+.eyebrow {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin-bottom: 13px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 7vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -1.8px;
+  margin: 0;
+  max-width: 600px;
+}
+
+.hero h1 span {
+  color: var(--red);
+}
+
+.hero p {
+  max-width: 460px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #b5a9ab;
+  margin: 15px 0 0;
+}
+
+.hero-bottom {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 23px;
+}
+
+.hero-chip {
+  font-size: 10px;
+  font-weight: 800;
+  color: #e9dfe1;
+  padding: 9px 12px;
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  border-radius: 6px;
+}
+
+/* SEARCH */
+
+.search-wrap {
+  padding: 23px 5% 8px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: #121010;
+  border: 1px solid #332025;
+  transition: .25s;
+}
+
+.search-box:focus-within {
+  border-color: var(--red);
+  box-shadow: 0 0 22px #ff263f12;
+}
+
+.search-icon {
+  font-size: 19px;
+  color: var(--red);
+}
+
+.search-box input {
+  width: 100%;
+  min-width: 0;
+  padding: 16px 0;
+  border: 0;
+  outline: 0;
+  color: white;
+  background: transparent;
+  font-size: 13px;
+}
+
+.search-box input::placeholder {
+  color: #82777a;
+}
+
+/* SECTION */
+
+.section-heading {
+  padding: 22px 5% 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -.4px;
+}
+
+.section-heading h2 span {
+  color: var(--red);
+}
+
+#status {
+  padding: 3px 5% 10px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* MOVIE GRID */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  padding: 8px 4% 35px;
+}
+
+.card {
+  min-width: 0;
+  overflow: hidden;
+  background: linear-gradient(150deg, #191515, #0f0e0e);
+  border: 1px solid #ffffff0d;
+  border-radius: 13px;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+
+.card:active {
+  transform: scale(.98);
+}
+
+.poster-link {
+  display: block;
+}
+
+.poster {
+  width: 100%;
+  height: 225px;
+  display: block;
+  object-fit: cover;
+  background: linear-gradient(145deg, #351016, #151111);
+}
+
+.poster-fallback {
+  width: 100%;
+  height: 225px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, #351016, #151111);
+  font-size: 44px;
+}
+
+.card-info {
+  padding: 12px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.card-title a:hover {
+  color: #ff697c;
+}
+
+.card-meta {
+  color: var(--muted);
+  font-size: 10px;
+  margin: 8px 0 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.quality-badge {
+  display: inline-block;
+  margin-bottom: 11px;
+  padding: 5px 7px;
+  color: #ff7181;
+  background: #ff263f12;
+  border: 1px solid #ff263f32;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .4px;
+}
+
+.red-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 9px;
+  border: 1px solid #ff465c;
+  border-radius: 7px;
+  background: linear-gradient(110deg, #ff263f, #c90025);
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 5px 18px #ff263f15;
+  transition: .2s;
+}
+
+.red-button:hover {
+  filter: brightness(1.13);
+}
+
+.outline-button {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #453034;
+  border-radius: 7px;
+  background: #1b1415;
+  color: #f2e7e9;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 55px 15px;
+  border: 1px dashed #4b282e;
+  border-radius: 12px;
+  color: #a99b9e;
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+/* DETAIL PAGE */
+
+.detail-top {
+  padding: 20px 5% 0;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #452127;
+  background: #160e10;
+  color: #ff9aa6;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.detail-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 18px 4% 0;
+  border: 1px solid #392025;
+  border-radius: 16px;
+  background:
+    linear-gradient(90deg, #0c0809 0%, #16090c 55%, #260d13 100%);
+}
+
+.detail-main {
+  display: grid;
+  grid-template-columns: 125px minmax(0, 1fr);
+  gap: 17px;
+  padding: 18px;
+  align-items: start;
+}
+
+.detail-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 9px;
+  background: #211014;
+  border: 1px solid #ffffff12;
+}
+
+.detail-title {
+  font-size: clamp(21px, 5vw, 34px);
+  line-height: 1.17;
+  letter-spacing: -.6px;
+  margin: 3px 0 12px;
+  overflow-wrap: anywhere;
+}
+
+.detail-subtitle {
+  color: #b3a4a7;
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.detail-description {
+  margin: 18px 0 0;
+  padding-top: 15px;
+  border-top: 1px solid #ffffff12;
+  color: #c4b8ba;
+  font-size: 12px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.detail-section {
+  padding: 27px 5% 0;
+}
+
+.detail-section h2 {
+  font-size: 17px;
+  margin: 0 0 15px;
+}
+
+.detail-section h2 span {
+  color: var(--red);
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.spec {
+  padding: 15px 12px;
+  border: 1px solid #302024;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #181112, #100e0e);
+  min-width: 0;
+}
+
+.spec-label {
+  font-size: 9px;
+  font-weight: 900;
+  color: #a48c91;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.spec-value {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 9px;
+  overflow-wrap: anywhere;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid #3b2227;
+  border-radius: 9px;
+  background: #171010;
+}
+
+.gallery-empty {
+  grid-column: 1 / -1;
+  color: #8e8083;
+  padding: 24px 14px;
+  text-align: center;
+  border: 1px dashed #44242a;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.download-panel {
+  border: 1px solid #49212a;
+  background: linear-gradient(145deg, #1d0e12, #100c0d);
+  padding: 17px;
+  border-radius: 13px;
+}
+
+.download-note {
+  color: #b4a5a8;
+  font-size: 11px;
+  line-height: 1.8;
+  margin: -3px 0 15px;
+}
+
+.download-list {
+  display: grid;
+  gap: 10px;
+}
+
+.download-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(110deg, #ff263f, #b90022);
+  color: white;
+  border: 1px solid #ff4d62;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 5px 20px #ff263f15;
+}
+
+.download-button small {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  opacity: .8;
+  margin-top: 5px;
+}
+
+.no-links {
+  color: #b7a9ac;
+  font-size: 12px;
+  line-height: 1.8;
+  padding: 14px;
+  border-radius: 8px;
+  background: #ffffff05;
+}
+
+/* FOOTER */
+
+footer {
+  margin-top: 40px;
+  padding: 25px 5%;
+  border-top: 1px solid #ffffff0d;
+  text-align: center;
+  color: #827679;
+  font-size: 10px;
+  line-height: 1.9;
+}
+
+footer strong {
+  color: #ff5368;
+  letter-spacing: 2px;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 650px) {
+  .hero {
+    padding-top: 65px;
+    padding-bottom: 55px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .poster, .poster-fallback {
+    height: 300px;
+  }
+
+  .detail-main {
+    grid-template-columns: 210px minmax(0, 1fr);
+    padding: 28px;
+    gap: 28px;
+  }
+
+  .detail-hero {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .detail-top, .detail-section {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .spec-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .download-panel {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 950px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .poster, .poster-fallback {
+    height: 320px;
+  }
+}
+
+@media (max-width: 360px) {
+  .detail-main {
+    grid-template-columns: 95px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .detail-title {
+    font-size: 19px;
+  }
+
+  .poster, .poster-fallback {
+    height: 190px;
+  }
+
+  .card-info {
+    padding: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
 }
 </style>
 </head>
@@ -84,50 +670,148 @@ footer{text-align:center;padding:25px;color:#888;font-size:12px}
 <body>
 
 <header>
-  <div class="logo">FLIXORA</div>
-  <div class="tag">MOVIE HUB</div>
+  <a class="logo" href="./" aria-label="Flixora Home">
+    FLIX<span>ORA</span>
+    <small>YOUR CINEMA WORLD</small>
+  </a>
+  <div class="header-badge">PREMIUM CINEMA</div>
 </header>
 
-<section class="hero">
-  <h1>Discover Your<br>Next Favourite.</h1>
-  <p>Explore movies, read details and choose an available download option.</p>
-</section>
+<!-- HOME PAGE -->
+<main id="homePage">
 
-<div class="search">
-  <input id="search" type="search" placeholder="Search movies by name or genre...">
-</div>
+  <section class="hero">
+    <div class="eyebrow">WELCOME TO FLIXORA</div>
+    <h1>YOUR NEXT<br><span>FAVOURITE</span><br>STARTS HERE.</h1>
+    <p>Discover movies, explore their details and check available formats in one place.</p>
 
-<h2 class="section-title">Latest Movies 🎬</h2>
-<div id="status" role="status">Connecting to Flixora...</div>
-<div class="grid" id="movies"></div>
+    <div class="hero-bottom">
+      <div class="hero-chip">🎬 MOVIE COLLECTION</div>
+      <div class="hero-chip">⚡ FAST DISCOVERY</div>
+      <div class="hero-chip">🔴 PREMIUM UI</div>
+    </div>
+  </section>
 
-<div id="modal" class="modal">
-  <div class="modal-box">
-    <h2 id="modalTitle">Movie Details</h2>
-    <p id="modalMeta" class="meta"></p>
-    <p id="modalDescription" class="description"></p>
-    <h3>Available Links</h3>
-    <div id="downloadLinks"></div>
-    <button id="closeModal" class="close">Close</button>
+  <div class="search-wrap">
+    <label class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        id="search"
+        type="search"
+        placeholder="Search title, year, language or genre..."
+        autocomplete="off"
+      >
+    </label>
   </div>
-</div>
 
-<footer>© 2026 Flixora · Authorized content only</footer>
+  <div class="section-heading">
+    <h2>Latest <span>Movies</span></h2>
+  </div>
+
+  <div id="status" role="status" aria-live="polite">
+    Connecting to Flixora...
+  </div>
+
+  <section class="grid" id="movies" aria-label="Movie collection"></section>
+
+</main>
+
+<!-- MOVIE DETAILS PAGE -->
+<main id="detailPage" class="hidden">
+
+  <div class="detail-top">
+    <button class="back-button" id="backButton" type="button">
+      ← Back to Movies
+    </button>
+  </div>
+
+  <section class="detail-hero">
+    <div class="detail-main">
+      <img
+        id="detailPoster"
+        class="detail-poster"
+        alt="Movie poster"
+      >
+
+      <div>
+        <div class="eyebrow">FLIXORA EXCLUSIVE DETAILS</div>
+        <h1 class="detail-title" id="detailTitle">Movie Title</h1>
+        <div class="detail-subtitle" id="detailMeta"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-section">
+    <h2>Movie <span>Information</span></h2>
+    <div class="spec-grid">
+      <div class="spec">
+        <div class="spec-label">Release Year</div>
+        <div class="spec-value" id="specYear">—</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-label">Quality</div>
+        <div class="spec-value" id="specQuality">Not specified</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-label">File Size</div>
+        <div class="spec-value" id="specSize">Not specified</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-label">Language</div>
+        <div class="spec-value" id="specLanguage">Not specified</div>
+      </div>
+    </div>
+
+    <p class="detail-description" id="detailDescription"></p>
+  </section>
+
+  <section class="detail-section">
+    <h2>Movie <span>Gallery</span></h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section class="detail-section">
+    <h2>Available <span>Options</span></h2>
+    <div class="download-panel">
+      <p class="download-note">
+        Check the available links below. File size and quality are displayed
+        only when provided by the publisher.
+      </p>
+      <div class="download-list" id="downloadList"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>FLIXORA</strong><br>
+  Discover. Explore. Enjoy.<br>
+  © 2026 Flixora · Share only content you have permission to distribute.
+</footer>
 
 <script type="module">
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getFirestore, collection, getDocs
+  getFirestore,
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Use your own Firebase Web App config here. */
+/*
+  Firebase Web App configuration.
+  Keep the actual values from Firebase Project Settings.
+  authDomain and storageBucket must not contain https://.
+*/
 const firebaseConfig = {
   apiKey: "AIzaSyBiLEWdoL9wstA1gB_D2oJaryfUuNZ_Dk8",
-  authDomain: "http://flixora-32e7c.firebaseapp.com",
+  authDomain: "flixora-32e7c.firebaseapp.com",
   projectId: "flixora-32e7c",
-  storageBucket: "http://flixora-32e7c.firebasestorage.app",
+  storageBucket: "flixora-32e7c.firebasestorage.app",
   messagingSenderId: "306452549829",
   appId: "306452549829:web:e5feebaf33ded56cffe0ac"
 };
@@ -136,39 +820,222 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const $ = id => document.getElementById(id);
+
 let movies = [];
+let currentMovie = null;
 
 function safeHttpsUrl(value) {
-  if (!value) return "";
+  if (typeof value !== "string" || !value.trim()) return "";
 
   try {
-    const url = new URL(value);
-    return url.protocol === "https:" ? url.href : "";
+    const url = new URL(value.trim());
+
+    if (url.protocol !== "https:") return "";
+
+    return url.href;
   } catch {
     return "";
+  }
+}
+
+function text(value, fallback = "") {
+  if (value === undefined || value === null) return fallback;
+  return String(value);
+}
+
+function makeImage(url, className, alt) {
+  const img = document.createElement("img");
+  img.className = className;
+  img.alt = alt;
+  img.loading = "lazy";
+  img.src = url;
+
+  img.addEventListener("error", () => {
+    const fallback = document.createElement("div");
+    fallback.className = className + " poster-fallback";
+    fallback.textContent = "🎬";
+    img.replaceWith(fallback);
+  }, { once: true });
+
+  return img;
+}
+
+function getMovieIdFromUrl() {
+  return new URLSearchParams(location.search).get("movie");
+}
+
+function getMovieById(id) {
+  return movies.find(movie => movie.id === id);
+}
+
+function showHome() {
+  $("homePage").classList.remove("hidden");
+  $("detailPage").classList.add("hidden");
+  currentMovie = null;
+  document.title = "FLIXORA — Premium Cinema";
+}
+
+function showDetails(movie) {
+  currentMovie = movie;
+
+  $("homePage").classList.add("hidden");
+  $("detailPage").classList.remove("hidden");
+
+  const title = text(movie.title, "Untitled Movie");
+  const poster = safeHttpsUrl(movie.poster);
+
+  document.title = title + " — FLIXORA";
+
+  $("detailTitle").textContent = title;
+  $("detailMeta").textContent = [
+    text(movie.year),
+    text(movie.genre),
+    text(movie.language)
+  ].filter(Boolean).join(" · ") || "Movie details";
+
+  $("specYear").textContent = text(movie.year, "Not specified");
+  $("specQuality").textContent = text(movie.quality, "Not specified");
+  $("specSize").textContent = text(movie.fileSize || movie.size, "Not specified");
+  $("specLanguage").textContent = text(movie.language, "Not specified");
+
+  $("detailDescription").textContent =
+    text(movie.description, "No description available.");
+
+  const posterBox = $("detailPoster");
+
+  posterBox.onerror = () => {
+    posterBox.removeAttribute("src");
+    posterBox.alt = "Poster unavailable";
+  };
+
+  if (poster) {
+    posterBox.src = poster;
+  } else {
+    posterBox.removeAttribute("src");
+    posterBox.alt = "Poster unavailable";
+  }
+
+  renderGallery(movie);
+  renderDownloadLinks(movie);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderGallery(movie) {
+  const gallery = $("gallery");
+  gallery.replaceChildren();
+
+  /*
+    Supported Firestore fields:
+    screenshots: ["https://...", "https://..."]
+    or screenshot1, screenshot2, screenshot3, screenshot4
+  */
+  let images = [];
+
+  if (Array.isArray(movie.screenshots)) {
+    images = movie.screenshots;
+  }
+
+  for (const key of ["screenshot1", "screenshot2", "screenshot3", "screenshot4"]) {
+    if (movie[key]) images.push(movie[key]);
+  }
+
+  if (movie.poster) images.unshift(movie.poster);
+
+  images = [...new Set(images.map(safeHttpsUrl).filter(Boolean))].slice(0, 4);
+
+  if (!images.length) {
+    const empty = document.createElement("div");
+    empty.className = "gallery-empty";
+    empty.textContent =
+      "No gallery photos added yet. Add screenshot URLs to this movie in Firestore.";
+    gallery.appendChild(empty);
+    return;
+  }
+
+  images.forEach((url, index) => {
+    gallery.appendChild(
+      makeImage(url, "", text(movie.title, "Movie") + " image " + (index + 1))
+    );
+  });
+}
+
+function renderDownloadLinks(movie) {
+  const box = $("downloadList");
+  box.replaceChildren();
+
+  const options = [
+    { key: "direct", title: "Direct Download", subtitle: "Open available link" },
+    { key: "drive", title: "Google Drive", subtitle: "Open Drive link" },
+    { key: "mediafire", title: "MediaFire", subtitle: "Open MediaFire link" },
+    { key: "mega", title: "MEGA", subtitle: "Open MEGA link" }
+  ];
+
+  let count = 0;
+
+  for (const option of options) {
+    const url = safeHttpsUrl(movie[option.key]);
+    if (!url) continue;
+
+    const anchor = document.createElement("a");
+    anchor.className = "download-button";
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    const label = document.createElement("span");
+    label.textContent = option.title;
+
+    const small = document.createElement("small");
+    small.textContent = option.subtitle;
+
+    label.appendChild(small);
+
+    const arrow = document.createElement("span");
+    arrow.textContent = "↗";
+    arrow.style.fontSize = "20px";
+
+    anchor.append(label, arrow);
+    box.appendChild(anchor);
+    count++;
+  }
+
+  if (!count) {
+    const message = document.createElement("div");
+    message.className = "no-links";
+    message.textContent =
+      "No links are available for this movie yet.";
+    box.appendChild(message);
   }
 }
 
 function renderMovies() {
   const query = $("search").value.trim().toLowerCase();
   const container = $("movies");
-  container.replaceChildren();
 
-  const filtered = movies.filter(movie =>
-    String(movie.title || "").toLowerCase().includes(query) ||
-    String(movie.genre || "").toLowerCase().includes(query) ||
-    String(movie.year || "").includes(query)
-  );
+container.replaceChildren();
+
+  const filtered = movies.filter(movie => {
+    const searchable = [
+      movie.title,
+      movie.genre,
+      movie.year,
+      movie.language,
+      movie.quality
+    ].map(value => text(value).toLowerCase()).join(" ");
+
+    return searchable.includes(query);
+  });
 
   $("status").textContent =
-    filtered.length ? filtered.length + " movie(s) available" : "";
+    filtered.length + (filtered.length === 1 ? " movie available" : " movies available");
 
   if (!filtered.length) {
     const empty = document.createElement("div");
     empty.className = "empty";
     empty.textContent = movies.length
-      ? "No movies match your search."
-      : "No movies added yet.";
+      ? "No movies match your search. Try another title or keyword."
+      : "No movies added yet. Your movie collection will appear here.";
     container.appendChild(empty);
     return;
   }
@@ -178,123 +1045,120 @@ function renderMovies() {
     card.className = "card";
 
     const posterUrl = safeHttpsUrl(movie.poster);
-    let poster;
+    const link = document.createElement("a");
+    link.className = "poster-link";
+    link.href = "?movie=" + encodeURIComponent(movie.id);
+    link.setAttribute("aria-label", "View " + text(movie.title, "movie"));
 
     if (posterUrl) {
-      poster = document.createElement("img");
-      poster.className = "poster";
-      poster.loading = "lazy";
-      poster.alt = String(movie.title || "Movie poster");
-      poster.src = posterUrl;
+      link.appendChild(
+        makeImage(posterUrl, "poster", text(movie.title, "Movie poster"))
+      );
     } else {
-      poster = document.createElement("div");
-      poster.className = "poster";
-      poster.textContent = "🎬";
+      const fallback = document.createElement("div");
+      fallback.className = "poster-fallback";
+      fallback.textContent = "🎬";
+      link.appendChild(fallback);
     }
 
     const info = document.createElement("div");
-    info.className = "info";
+    info.className = "card-info";
 
     const title = document.createElement("h3");
-    title.textContent = String(movie.title || "Untitled");
+    title.className = "card-title";
+
+    const titleLink = document.createElement("a");
+    titleLink.href = "?movie=" + encodeURIComponent(movie.id);
+    titleLink.textContent = text(movie.title, "Untitled Movie");
+
+    title.appendChild(titleLink);
 
     const meta = document.createElement("p");
-    meta.className = "meta";
-    meta.textContent =
-      String(movie.year || "") + " · " + String(movie.genre || "");
+    meta.className = "card-meta";
+    meta.textContent = [
+      text(movie.year),
+      text(movie.genre),
+      text(movie.language)
+    ].filter(Boolean).join(" · ") || "Movie";
 
-    const button = document.createElement("button");
-    button.className = "details";
-    button.textContent = "View Details";
-    button.addEventListener("click", () => openDetails(movie));
+    const quality = document.createElement("div");
+    quality.className = "quality-badge";
+    quality.textContent = text(movie.quality, "VIEW DETAILS");
 
-    info.append(title, meta, button);
-    card.append(poster, info);
+    const detailsButton = document.createElement("a");
+    detailsButton.className = "red-button";
+    detailsButton.href = "?movie=" + encodeURIComponent(movie.id);
+    detailsButton.textContent = "VIEW MOVIE ↗";
+
+    info.append(title, meta, quality, detailsButton);
+    card.append(link, info);
     container.appendChild(card);
   }
 }
 
-function openDetails(movie) {
-  $("modalTitle").textContent = String(movie.title || "Movie Details");
-  $("modalMeta").textContent =
-    String(movie.year || "") + " · " + String(movie.genre || "");
-  $("modalDescription").textContent =
-    String(movie.description || "No description available.");
+function openMovieFromUrl() {
+  const id = getMovieIdFromUrl();
 
-  const linksBox = $("downloadLinks");
-  linksBox.replaceChildren();
-
-  const links = [
-    ["direct", "Direct Download"],
-    ["drive", "Google Drive"],
-    ["mediafire", "MediaFire"],
-    ["mega", "MEGA"]
-  ];
-
-  let count = 0;
-
-  for (const [key, label] of links) {
-    const url = safeHttpsUrl(movie[key]);
-    if (!url) continue;
-
-    const anchor = document.createElement("a");
-    anchor.className = "download-link";
-    anchor.href = url;
-    anchor.target = "_blank";
-    anchor.rel = "noopener noreferrer";
-
-    const button = document.createElement("button");
-    button.textContent = label;
-    anchor.appendChild(button);
-    linksBox.appendChild(anchor);
-    count++;
+  if (!id) {
+    showHome();
+    return;
   }
 
-  if (!count) {
-    const message = document.createElement("p");
-    message.className = "description";
-    message.textContent = "No download links are available yet.";
-    linksBox.appendChild(message);
-  }
+  const movie = getMovieById(id);
 
-  $("modal").style.display = "flex";
+  if (movie) {
+    showDetails(movie);
+  } else {
+    showHome();
+    $("status").textContent = "Movie not found. It may have been removed.";
+  }
 }
 
-$("closeModal").addEventListener("click", () => {
-  $("modal").style.display = "none";
-});
-
-$("modal").addEventListener("click", event => {
-  if (event.target === $("modal")) {
-    $("modal").style.display = "none";
-  }
+$("backButton").addEventListener("click", () => {
+  history.pushState({}, "", location.pathname);
+  showHome();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 $("search").addEventListener("input", renderMovies);
 
+window.addEventListener("popstate", () => {
+  openMovieFromUrl();
+});
+
 async function loadMovies() {
   try {
-    $("status").textContent = "Loading movies...";
+    $("status").textContent = "Loading your movie collection...";
 
     const snapshot = await getDocs(collection(db, "movies"));
 
-    movies = snapshot.docs.map(item => ({
-      id: item.id,
-      ...item.data()
+    movies = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
     }));
 
-    movies.sort((a, b) =>
-      String(b.createdAt?.seconds || 0)
-        .localeCompare(String(a.createdAt?.seconds || 0))
-    );
+    movies.sort((a, b) => {
+      const timeA = a.createdAt?.seconds || 0;
+      const timeB = b.createdAt?.seconds || 0;
+      return timeB - timeA;
+    });
 
     renderMovies();
+    openMovieFromUrl();
 
   } catch (error) {
-    console.error("Flixora loading error:", error);
+    console.error("Flixora Firebase error:", error);
+
     $("status").textContent =
-      "Could not load movies. Check Firebase config, hosting and Firestore Rules.";
+      "Could not load movies. Check Firebase configuration and Firestore Rules.";
+
     $("movies").replaceChildren();
+
+    const message = document.createElement("div");
+    message.className = "empty";
+    message.textContent =
+      "Unable to connect to the movie database. Please check your Firebase setup and try again.";
+    $("movies").appendChild(message);
   }
 }
 
